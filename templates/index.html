@@ -17,7 +17,13 @@
 <body>
     <div class="container">
         <h1>図書管理システム</h1>
-        
+        <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+    <h3>ISBNでかんたん登録</h3>
+    <form action="/add_by_isbn" method="POST">
+        <input type="text" name="isbn" placeholder="ISBN(13桁の数字)を入力" required>
+        <button type="submit">ISBNで自動登録</button>
+    </form>
+</div>
         <div class="book-list-section">
             <h2>本を登録する</h2>
             <form action="/add" method="POST">
