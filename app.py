@@ -1,7 +1,8 @@
+import os  # OS環境変数を使用するために必要
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
-import os  # OS環境変数を使用するために必要
+
 
 app = Flask(__name__)
 
