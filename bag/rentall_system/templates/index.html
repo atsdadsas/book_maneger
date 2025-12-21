@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>図書貸し出し管理システム</title>
+    <link rel="stylesheet" href="test.css">
+    <style>
+        /* test.cssにない、このページ専用の微調整だけここに残す */
+        .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .status-badge { font-weight: bold; margin-left: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="margin-bottom: 20px;">
+            <a href="/history" class="btn btn-green">図書館の利用予約</a>
+            <a href="/" class="btn btn-gray">ホームに戻る</a>
+        </div>
+
+        <h1>図書管理システム</h1>
+
+        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+            <h3>ISBNでかんたん登録</h3>
+            <form action="/add_by_isbn" method="POST">
+                <input type="text" name="isbn" placeholder="ISBNを入力" required style="padding: 8px;">
+                <button type="submit" class="btn btn-green" style="padding: 8px 15px;">自動登録</button>
+            </form>
+        </div>
+
+        <div class="book-list-section">
+            <h2>現在の蔵書一覧</h2>
+            <ul>
+                {% for book in books %}
+                <li>
+                    <div>
+                        {{ book.title }} 
+                        <span class="status-badge">[{{ book.status }}]</span>
+                    </div>
+                    
+                    {% if book.status == "貸出可能" %}
+                    <form action="/borrow/{{ book.id }}" method="POST">
+                        <button type="submit" class="btn" style="background-color: #e1f5fe; border: 1px solid #01579b; color: #01579b; padding: 5px 15px;">借りる</button>
+                    </form>
+                    {% else %}
+                    <form action="/return/{{ book.id }}" method="POST">
+                        <button type="submit" class="btn" style="background-color: #fff9c4; border: 1px solid #fbc02d; color: #856404; padding: 5px 15px;">返す</button>
+                    </form>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
