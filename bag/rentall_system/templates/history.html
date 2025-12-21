@@ -2,18 +2,20 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="test.css"> <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="test.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>図書館利用予約 - 図書管理システム</title>
     <style>
-        /* テーブル専用のデザインだけここに残す（test.cssにないもの） */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
         th { background-color: #eee; }
         .status-reserved { color: #d32f2f; font-weight: bold; }
+        .status-available { color: #4CAF50; }
     </style>
 </head>
 <body>
-    <div class="container"> <a href="/" class="btn btn-gray">← ホームに戻る</a>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="btn btn-gray">← ホームに戻る</a>
         
         <h1>図書館 利用予約表（平日）</h1>
         
@@ -30,12 +32,22 @@
                     <td><strong>{{ slot }}コマ目</strong></td>
                     {% for day in ['月', '火', '水', '木', '金'] %}
                     <td>
-                        <span class="status-available">空き</span><br>
-                        <form action="/reserve" method="POST" style="margin-top: 5px;">
-                            <input type="hidden" name="day" value="{{ day }}">
-                            <input type="hidden" name="slot" value="{{ slot }}">
-                            <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 12px;">予約</button>
-                        </form>
+                        {# Python側の res_dict = {(r.day, r.slot): ...} と合わせる #}
+                        {% if (day, slot) in reservations %}
+                            <span class="status-reserved">済</span><br>
+                            <form action="/reserve" method="POST" style="margin-top: 5px;">
+                                <input type="hidden" name="day" value="{{ day }}">
+                                <input type="hidden" name="slot" value="{{ slot }}">
+                                <button type="submit" class="btn btn-gray" style="padding: 2px 5px; font-size: 10px;">取消</button>
+                            </form>
+                        {% else %}
+                            <span class="status-available">空き</span><br>
+                            <form action="/reserve" method="POST" style="margin-top: 5px;">
+                                <input type="hidden" name="day" value="{{ day }}">
+                                <input type="hidden" name="slot" value="{{ slot }}">
+                                <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 12px;">予約</button>
+                            </form>
+                        {% endif %}
                     </td>
                     {% endfor %}
                 </tr>

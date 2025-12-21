@@ -16,21 +16,18 @@ db = SQLAlchemy(app)
 
 # --- データベースのモデル ---
 
-# 既存の本のモデル
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), default="不明な著者")
     status = db.Column(db.String(20), default="貸出可能")
 
-# 【追加】予約情報のモデル
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.String(10), nullable=False)    # 月〜金
-    slot = db.Column(db.Integer, nullable=False)   # 1〜5コマ
+    slot = db.Column(db.Integer, nullable=False)     # 1〜5コマ
     user_name = db.Column(db.String(100), default="予約済み")
 
-# データベースの初期化
 with app.app_context():
     db.create_all()
 
@@ -41,36 +38,34 @@ def index():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
-# 【追加】予約ページを表示する
 @app.route('/history')
 def history():
-    # 全ての予約データを取得
+    # データベースから全予約を取得して辞書に変換
     all_res = Reservation.query.all()
-    # HTMLで扱いやすいように辞書型に変換 {(曜日, コマ): 名前}
+    # 曜日は文字列、スロットは整数として辞書のキーにする
     res_dict = {(r.day, r.slot): r.user_name for r in all_res}
     return render_template('history.html', reservations=res_dict)
 
-# 【追加】予約を実行する
 @app.route('/reserve', methods=['POST'])
 def reserve():
     day = request.form.get('day')
     slot = int(request.form.get('slot'))
-    user_name = request.form.get('user_name') or "利用者"
-
-    # 既に予約があるか確認
+    
+    # 既に予約があるかデータベースを確認
     existing = Reservation.query.filter_by(day=day, slot=slot).first()
+    
     if existing:
-        # 既にある場合は削除（キャンセル機能）
+        # 予約がある場合は「キャンセル」
         db.session.delete(existing)
     else:
-        # 新しく予約を追加
-        new_res = Reservation(day=day, slot=slot, user_name=user_name)
+        # 予約がない場合は「新規登録」
+        new_res = Reservation(day=day, slot=slot)
         db.session.add(new_res)
     
     db.session.commit()
     return redirect(url_for('history'))
 
-# --- 以下、既存の蔵書管理系ルーティング ---
+# --- 蔵書管理系 ---
 @app.route("/add_by_isbn", methods=["POST"])
 def add_by_isbn():
     isbn = request.form.get("isbn")
@@ -87,10 +82,9 @@ def add_by_isbn():
             db.session.add(new_book)
             db.session.commit()
             return redirect("/")
-        else:
-            return "本が見つかりませんでした", 404
+        return "本が見つかりませんでした", 404
     except Exception as e:
-        return f"エラーが発生しました: {str(e)}", 500
+        return f"エラー: {str(e)}", 500
 
 @app.route('/add', methods=['POST'])
 def add_book():
