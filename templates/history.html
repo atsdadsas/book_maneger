@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>図書館利用予約 - 図書管理システム</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
+        th { background-color: #eee; }
+        .btn-home { display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #757575; color: white; text-decoration: none; border-radius: 5px; }
+        .reserve-btn { background-color: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .status-reserved { color: #d32f2f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn-home">← ホームに戻る</a>
+        <h1>図書館 利用予約表（平日）</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>時間 / 曜日</th>
+                    <th>月曜日</th>
+                    <th>火曜日</th>
+                    <th>水曜日</th>
+                    <th>木曜日</th>
+                    <th>金曜日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in range(1, 6) %}
+                <tr>
+                    <td><strong>{{ slot }}コマ目</strong></td>
+                    {% for day in ['月', '火', '水', '木', '金'] %}
+                    <td>
+                        <span class="status-available">空き</span><br>
+                        <form action="/reserve" method="POST" style="margin-top: 5px;">
+                            <input type="hidden" name="day" value="{{ day }}">
+                            <input type="hidden" name="slot" value="{{ slot }}">
+                            <button type="submit" class="reserve-btn">予約</button>
+                        </form>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
