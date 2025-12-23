@@ -3,7 +3,7 @@
     .container { 
         max-width: 800px; 
         margin: 50px auto; /* 上下に50pxの隙間を開けて中央寄せ */
-        background: rgb(255, 179, 179); 
+        background: rgb(255, 255, 255); 
         padding: 40px; 
         border-radius: 12px; 
         box-shadow: 0 4px 15px rgba(0,0,0,0.1); 

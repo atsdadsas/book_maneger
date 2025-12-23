@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>図書貸し出し管理システム</title>
-    <link rel="stylesheet" href="test.css"> 
-
-<link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <style>
-        /* test.cssにない、このページ専用の微調整だけここに残す */
+        /* ページ専用の微調整 */
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
         ul { list-style: none; padding: 0; }
         li { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .status-badge { font-weight: bold; margin-left: 10px; color: #555; }
+        .nav-buttons { margin-bottom: 20px; display: flex; gap: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div style="margin-bottom: 20px;">
-            <a href="/history" class="btn btn-green">図書館の利用予約</a>
+        <div class="nav-buttons">
             <a href="/" class="btn btn-gray">ホームに戻る</a>
-<a href="/board" class="btn btn-gray">掲示板に移動</a>
+            <a href="/history" class="btn btn-green">図書館の利用予約</a>
+            <a href="/talk" class="btn btn-gray">掲示板に移動</a>
         </div>
 
         <h1>図書管理システム</h1>
