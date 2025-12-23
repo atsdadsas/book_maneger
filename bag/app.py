@@ -102,7 +102,7 @@ def reserve():
     return redirect(url_for('history'))
 
 # 掲示板表示
-@app.route('/board')
+@app.route('/talk')
 def board():
     # 最新の20件を表示
     messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
