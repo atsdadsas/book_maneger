@@ -51,20 +51,26 @@ def history():
     return render_template('history.html', reservations=res_dict)
 
 # 【追加】予約を実行する
+
 @app.route('/reserve', methods=['POST'])
 def reserve():
     day = request.form.get('day')
-    slot = int(request.form.get('slot'))
-    user_name = request.form.get('user_name') or "利用者"
+    slot_raw = request.form.get('slot')
 
-    # 既に予約があるか確認
+    if not day or not slot_raw:
+        return redirect(url_for('history'))
+
+    # ここで確実に整数(int)にする
+    slot = int(slot_raw)
+    
+    # 既存の予約をチェック
     existing = Reservation.query.filter_by(day=day, slot=slot).first()
+    
     if existing:
-        # 既にある場合は削除（キャンセル機能）
         db.session.delete(existing)
     else:
-        # 新しく予約を追加
-        new_res = Reservation(day=day, slot=slot, user_name=user_name)
+        # 保存する値を明確にする
+        new_res = Reservation(day=day, slot=slot, user_name="済")
         db.session.add(new_res)
     
     db.session.commit()

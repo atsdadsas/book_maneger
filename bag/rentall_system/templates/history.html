@@ -33,7 +33,7 @@
                     {% for day in ['月', '火', '水', '木', '金'] %}
                     <td>
                         {# Python側の res_dict = {(r.day, r.slot): ...} と合わせる #}
-                        {% if (day, slot) in reservations %}
+                        {% if (day, slot|int) in reservations %}
                             <span class="status-reserved">済</span><br>
                             <form action="/reserve" method="POST" style="margin-top: 5px;">
                                 <input type="hidden" name="day" value="{{ day }}">
