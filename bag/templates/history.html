@@ -2,7 +2,9 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="test.css"> 
+
+<link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>図書館利用予約 - 図書管理システム</title>
     <style>

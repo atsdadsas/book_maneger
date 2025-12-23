@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>図書貸し出し管理システム</title>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="test.css"> 
+
+<link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <style>
         /* test.cssにない、このページ専用の微調整だけここに残す */
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
