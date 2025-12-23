@@ -106,7 +106,7 @@ def reserve():
 def board():
     # 最新の20件を表示
     messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
-    return render_template('message.html', messages=messages)
+    return render_template('talk.html', messages=messages)
 
 # 掲示板への投稿
 @app.route('/post_message', methods=['POST'])
