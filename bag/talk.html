@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset=="UTF-8">
+        <title>掲示板</title>
+        <link rel="stylesheet"href="{{ url_for('static', filename='test.css') }}">
+    </head>
+    <body>
+        <div class="container">
+        <a href="{{ url_for('index') }}" class="btn btn-gray">← ホームに戻る</a>
+        <h1>みんなの掲示板</h1>
+        <form action="/post_message" method="POST" style="margin-bottom: 30px;">
+    <textarea name="content" rows="4" style="width: 100%;" placeholder="メッセージを入力してください" required></textarea>
+    <br>
+    <button type="submit" class="btn btn-green">投稿する</button>
+    </form><hr>
+    <h2>最近の投稿</h2>
+<div class="message-list">
+    {% for m in messages %}
+    <div class="message-item" style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+        <p style="white-space: pre-wrap;">{{ m.content }}</p>
+        <small style="color: gray;">
+            投稿日: {{ m.posted_at.strftime('%Y/%m/%d %H:%M') }} | 
+            IP: {{ m.user_ip }}
+        </small>
+    </div>
+    {% else %}
+    <p>まだ投稿がありません。</p>
+    {% endfor %}
+</div>
+
+
+            
+        </div>
+    </body>
+</html>

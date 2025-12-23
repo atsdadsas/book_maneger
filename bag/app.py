@@ -30,6 +30,12 @@ class Reservation(db.Model):
     slot = db.Column(db.Integer, nullable=False)     # 1〜5コマ
     user_name = db.Column(db.String(100), default="予約済み")
 
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(500), nullable=False)  # 投稿内容
+    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 投稿時間
+    user_ip = db.Column(db.String(50)) # 投稿者のIPアドレス（誰か特定するため）
+
 with app.app_context():
     db.create_all()
 
