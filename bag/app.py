@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -32,6 +33,30 @@ with app.app_context():
     db.create_all()
 
 # --- ルーティング ---
+
+@app.route("/status")
+def status():
+    now= datetime.now()
+    
+# 2. 曜日を日本語に変換 (0=月, 1=火...)
+    days=['月', '火', '水', '木', '金', '土', '日']
+    # 火曜日ならnow.weekday=1 days[1]=火
+    current_day=days[now.weekday()]
+# 3. 現在の時間から「何コマ目」かを判定（例）
+    hour = now.hour
+    current_slot = 0
+    if 9 <= hour < 10: current_slot = 1
+    elif 10 <= hour < 12: current_slot = 2
+    elif 13 <= hour < 15: current_slot = 3
+    elif 15 <= hour < 17: current_slot = 4
+    elif 17 <= hour < 19: current_slot = 5
+
+    active_reservation = Reservation.query.filter_by(day=current_day, slot=current_slot).first()
+
+    return render_template('status.html', 
+                        res=active_reservation, 
+                        day=current_day, 
+                        slot=current_slot)
 
 @app.route('/')
 def index():

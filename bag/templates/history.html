@@ -16,6 +16,28 @@
 <body>
     <div class="container">
         <a href="{{ url_for('index') }}" class="btn btn-gray">← ホームに戻る</a>
+
+    <div class="container">
+        <h1>現在の利用状況</h1>
+        <div class="current-info" style="padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
+            <p>今は <strong>{{ day }}曜日 {{ slot }}コマ目</strong> です。</p>
+        {% if res %}
+        <div style="color:#d32f2f;font-size:1.5em;font-weight:bold;">
+            現在利用中です
+        </div>
+        <p>利用者:{{res.user_name}}</p>
+        {% else %}
+        <div style="color:#4CAF50;font-size:1.5em;font-weight: bold;">
+            現在あいてます。
+        </div>
+
+        {% endif %}
+        <a href="{{ url_for('history') }}" class="btn">予約表を見る</a>
+        </div>
+    </div>
+
+
+
         
         <h1>図書館 利用予約表（平日）</h1>
         
