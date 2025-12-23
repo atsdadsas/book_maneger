@@ -68,7 +68,24 @@ def status():
                         res=active_reservation, 
                         day=current_day, 
                         slot=current_slot)
+    
+@app.route('/board')
+def board():
+    # データベースから最新の投稿を20件取得
+    messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
+    return render_template('message.html', messages=messages)
 
+@app.route('/post_message', methods=['POST'])
+def post_message():
+    content = request.form.get('content')
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+    if content:
+        new_post = Post(content=content, user_ip=client_ip)
+        db.session.add(new_post)
+        db.session.commit()
+    
+    return redirect(url_for('board'))
 @app.route('/')
 def index():
     books = Book.query.all()
