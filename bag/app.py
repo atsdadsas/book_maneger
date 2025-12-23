@@ -2,9 +2,10 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
-from datetime import datetime
+from datetime import datetime,timedelta,timezone
 
 app = Flask(__name__)
+
 
 # --- データベースの設定 ---
 database_url = os.environ.get('DATABASE_URL')
@@ -37,6 +38,10 @@ with app.app_context():
 @app.route("/status")
 def status():
     now= datetime.now()
+# ★ 日本時間(JST)を設定する
+    jst = timezone(timedelta(hours=+9), 'JST')
+    # ★ UTCではなく日本時間で取得する
+    now = datetime.now(jst)
     
 # 2. 曜日を日本語に変換 (0=月, 1=火...)
     days=['月', '火', '水', '木', '金', '土', '日']

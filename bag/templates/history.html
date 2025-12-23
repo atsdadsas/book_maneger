@@ -56,18 +56,18 @@
                     <td>
                         {# Python側の res_dict = {(r.day, r.slot): ...} と合わせる #}
                         {% if (day, slot|int) in reservations %}
-                            <span class="status-reserved">済</span><br>
+                            <span class="status-reserved">閉</span><br>
                             <form action="/reserve" method="POST" style="margin-top: 5px;">
                                 <input type="hidden" name="day" value="{{ day }}">
                                 <input type="hidden" name="slot" value="{{ slot }}">
                                 <button type="submit" class="btn btn-gray" style="padding: 2px 5px; font-size: 10px;">取消</button>
                             </form>
                         {% else %}
-                            <span class="status-available">空き</span><br>
+                            <span class="status-available">開</span><br>
                             <form action="/reserve" method="POST" style="margin-top: 5px;">
                                 <input type="hidden" name="day" value="{{ day }}">
                                 <input type="hidden" name="slot" value="{{ slot }}">
-                                <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 12px;">予約</button>
+                                <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 12px;background-color: #0000FF;">　　</button>
                             </form>
                         {% endif %}
                     </td>
