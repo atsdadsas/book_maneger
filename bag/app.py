@@ -6,7 +6,6 @@ from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
-
 # --- データベースの設定 ---
 database_url = os.environ.get('DATABASE_URL')
 if database_url and database_url.startswith("postgres://"):
@@ -18,42 +17,48 @@ db = SQLAlchemy(app)
 
 # --- データベースのモデル ---
 
+# 1. 本のモデル
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), default="不明な著者")
     status = db.Column(db.String(20), default="貸出可能")
 
+# 2. 予約情報のモデル
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.String(10), nullable=False)    # 月〜金
     slot = db.Column(db.Integer, nullable=False)     # 1〜5コマ
     user_name = db.Column(db.String(100), default="予約済み")
 
+# 3. 掲示板のモデル
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)  # 投稿内容
-    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 投稿時間
-    user_ip = db.Column(db.String(50)) # 投稿者のIPアドレス（誰か特定するため）
+    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 日本時間で投稿
+    user_ip = db.Column(db.String(50)) # 投稿者のIPアドレス
 
+# データベースの初期化
 with app.app_context():
     db.create_all()
 
 # --- ルーティング ---
 
+# ホーム画面（蔵書一覧）
+@app.route('/')
+def index():
+    books = Book.query.all()
+    return render_template('index.html', books=books)
+
+# リアルタイム利用状況ページ
 @app.route("/status")
 def status():
     jst = timezone(timedelta(hours=+9), 'JST')
-# ★ 日本時間(JST)を設定する
-    jst = timezone(timedelta(hours=+9), 'JST')
-    # ★ UTCではなく日本時間で取得する
     now = datetime.now(jst)
     
-# 2. 曜日を日本語に変換 (0=月, 1=火...)
-    days=['月', '火', '水', '木', '金', '土', '日']
-    # 火曜日ならnow.weekday=1 days[1]=火
-    current_day=days[now.weekday()]
-# 3. 現在の時間から「何コマ目」かを判定（例）
+    days = ['月', '火', '水', '木', '金', '土', '日']
+    current_day = days[now.weekday()]
+
     hour = now.hour
     current_slot = 0
     if 9 <= hour < 10: current_slot = 1
@@ -68,13 +73,42 @@ def status():
                         res=active_reservation, 
                         day=current_day, 
                         slot=current_slot)
+
+# 予約一覧・管理ページ（カレンダー）
+@app.route('/history')
+def history():
+    all_res = Reservation.query.all()
+    res_dict = {(r.day, r.slot): r.user_name for r in all_res}
+    return render_template('history.html', reservations=res_dict)
+
+# 予約・キャンセル実行
+@app.route('/reserve', methods=['POST'])
+def reserve():
+    day = request.form.get('day')
+    slot_raw = request.form.get('slot')
+    if not day or not slot_raw:
+        return redirect(url_for('history'))
+
+    slot = int(slot_raw)
+    existing = Reservation.query.filter_by(day=day, slot=slot).first()
     
+    if existing:
+        db.session.delete(existing)
+    else:
+        new_res = Reservation(day=day, slot=slot, user_name="済")
+        db.session.add(new_res)
+    
+    db.session.commit()
+    return redirect(url_for('history'))
+
+# 掲示板表示
 @app.route('/board')
 def board():
-    # データベースから最新の投稿を20件取得
+    # 最新の20件を表示
     messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
     return render_template('message.html', messages=messages)
 
+# 掲示板への投稿
 @app.route('/post_message', methods=['POST'])
 def post_message():
     content = request.form.get('content')
@@ -86,39 +120,8 @@ def post_message():
         db.session.commit()
     
     return redirect(url_for('board'))
-@app.route('/')
-def index():
-    books = Book.query.all()
-    return render_template('index.html', books=books)
 
-@app.route('/history')
-def history():
-    # データベースから全予約を取得して辞書に変換
-    all_res = Reservation.query.all()
-    # 曜日は文字列、スロットは整数として辞書のキーにする
-    res_dict = {(r.day, r.slot): r.user_name for r in all_res}
-    return render_template('history.html', reservations=res_dict)
-
-@app.route('/reserve', methods=['POST'])
-def reserve():
-    day = request.form.get('day')
-    slot = int(request.form.get('slot'))
-    
-    # 既に予約があるかデータベースを確認
-    existing = Reservation.query.filter_by(day=day, slot=slot).first()
-    
-    if existing:
-        # 予約がある場合は「キャンセル」
-        db.session.delete(existing)
-    else:
-        # 予約がない場合は「新規登録」
-        new_res = Reservation(day=day, slot=slot)
-        db.session.add(new_res)
-    
-    db.session.commit()
-    return redirect(url_for('history'))
-
-# --- 蔵書管理系 ---
+# --- 蔵書管理系ルーティング ---
 @app.route("/add_by_isbn", methods=["POST"])
 def add_by_isbn():
     isbn = request.form.get("isbn")
