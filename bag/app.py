@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import requests
-from datetime import datetime,timedelta,timezone
+from datetime import datetime, timedelta, timezone
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ with app.app_context():
 
 @app.route("/status")
 def status():
-    now= datetime.now()
+    jst = timezone(timedelta(hours=+9), 'JST')
 # ★ 日本時間(JST)を設定する
     jst = timezone(timedelta(hours=+9), 'JST')
     # ★ UTCではなく日本時間で取得する
