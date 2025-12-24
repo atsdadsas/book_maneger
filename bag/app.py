@@ -59,10 +59,11 @@ def status():
     
     days = ['月', '火', '水', '木', '金', '土', '日']
     current_day = days[now.weekday()]
-    print(f"DEBUG: 今は{current_day}曜日の{current_slot}コマ目として探しています") # これを追加！
 
     hour = now.hour
     current_slot = 0
+    print(f"DEBUG: 今は{current_day}曜日の{current_slot}コマ目として探しています") # これを追加！
+
     if 9 <= hour < 10: current_slot = 1
     elif 10 <= hour < 12: current_slot = 2
     elif 13 <= hour < 15: current_slot = 3
@@ -134,7 +135,7 @@ def add_by_isbn():
         if "items" in data:
             book_info = data["items"][0]["volumeInfo"]
             image_links=book_info.get("imageLinks",{})
-            thumbail_url=image_links.get("thumbnail")
+            thumbnail_url=image_links.get("thumbnail")
             
             title = book_info.get("title", "不明なタイトル")
             author_list = book_info.get("authors", ["不明な著者"])
