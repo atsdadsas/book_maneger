@@ -3,98 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>部室貸し出し管理システム</title>
+    <title>図書・部室管理システム</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <style>
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
         ul { list-style: none; padding: 0; }
-        li { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .status-badge { font-weight: bold; margin-left: 10px; color: #555; }
         .nav-buttons { margin-bottom: 20px; display: flex; gap: 10px; }
-        #realtime-clock { 
-            background: #f9f9f9; 
-            padding: 10px; 
-            border-radius: 5px; 
-            border-left: 5px solid #555;
-        }
+        #realtime-clock { background: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 5px solid #555; font-weight: bold; }
+        .delete-btn { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 0.8em; margin-left: 10px; text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav-buttons">
-            <a href="/" class="btn btn-gray">ホームに戻る</a>
-            <a href="/history" class="btn btn-green">部室の利用予約</a>
-            <a href="/talk" class="btn btn-gray">掲示板に移動</a>
+            <a href="/" class="btn btn-gray">ホーム</a>
+            <a href="/history" class="btn btn-green">予約状況</a>
+            <a href="/talk" class="btn btn-gray">掲示板</a>
         </div>
 
         <h1>図書管理システム</h1>
 
-        <div id="realtime-clock" style="font-size: 1.2em; color: #555; margin-bottom: 20px; font-weight: bold;">
-            時刻を読み込み中...
-        </div>
+        <div id="realtime-clock">時刻を読み込み中...</div>
 
-        <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
             <h3>ISBNでかんたん登録</h3>
             <form action="/add_by_isbn" method="POST">
                 <input type="text" name="isbn" placeholder="ISBNを入力" required style="padding: 8px;">
-                <button type="submit" class="btn btn-green" style="padding: 8px 15px;">自動登録</button>
+                <button type="submit" class="btn btn-green">自動登録</button>
             </form>
         </div>
 
         <div class="book-list-section">
             <h2>現在の蔵書一覧</h2>
-<ul>
-    {% for book in books %}
-    <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-        
-        <div style="flex-shrink: 0; margin-right: 15px;">
-            {% if book.thumbnail %}
-                <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; height: auto; border-radius: 4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
-            {% else %}
-                <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; border-radius: 4px;">No Image</div>
-            {% endif %}
-        </div>
+            <ul>
+                {% for book in books %}
+                <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                    <div style="flex-shrink: 0; margin-right: 15px;">
+                        {% if book.thumbnail %}
+                            <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; border-radius: 4px;">
+                        {% else %}
+                            <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>
+                        {% endif %}
+                    </div>
 
-        <div style="flex-grow: 1;">
-            <div style="font-weight: bold; font-size: 1.1em;">{{ book.title }}</div>
-            <div style="color: #666; font-size: 0.9em;">著者: {{ book.author }}</div>
-            <span class="status-badge">[{{ book.status }}]</span>
-        </div>
+                    <div style="flex-grow: 1;">
+                        <div style="font-weight: bold;">{{ book.title }}</div>
+                        <div style="font-size: 0.8em; color: #666;">著者: {{ book.author }}</div>
+                        <span class="status-badge">[{{ book.status }}]</span>
+                        <form action="/delete/{{ book.id }}" method="POST" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
+                            <button type="submit" class="delete-btn">削除</button>
+                        </form>
+                    </div>
 
-        <div style="flex-shrink: 0;">
-            {% if book.status == "貸出可能" %}
-            <form action="/borrow/{{ book.id }}" method="POST" style="margin: 0;">
-                <button type="submit" class="btn" style="background-color: #e1f5fe; border: 1px solid #01579b; color: #01579b; padding: 5px 15px; cursor: pointer;">借りる</button>
-            </form>
-            {% else %}
-            <form action="/return/{{ book.id }}" method="POST" style="margin: 0;">
-                <button type="submit" class="btn" style="background-color: #fff9c4; border: 1px solid #fbc02d; color: #856404; padding: 5px 15px; cursor: pointer;">返す</button>
-            </form>
-            {% endif %}
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+                    <div style="flex-shrink: 0;">
+                        {% if book.status == "貸出可能" %}
+                        <form action="/borrow/{{ book.id }}" method="POST"><button type="submit" class="btn">借りる</button></form>
+                        {% else %}
+                        <form action="/return/{{ book.id }}" method="POST"><button type="submit" class="btn">返す</button></form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
     <script>
         function updateClock() {
             const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth() + 1;
-            const date = now.getDate();
-            const dayList = ["日", "月", "火", "水", "木", "金", "土"];
-            const day = dayList[now.getDay()];
-            
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-
-            const timeString = `${year}年${month}月${date}日(${day}) ${hours}:${minutes}:${seconds}`;
+            const timeString = now.toLocaleString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short', hour:'2-digit', minute:'2-digit', second:'2-digit' });
             document.getElementById('realtime-clock').textContent = "現在時刻: " + timeString;
         }
-
         setInterval(updateClock, 1000);
         updateClock();
     </script>

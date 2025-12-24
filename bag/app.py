@@ -17,27 +17,24 @@ db = SQLAlchemy(app)
 
 # --- データベースのモデル ---
 
-# 1. 本のモデル
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), default="不明な著者")
     status = db.Column(db.String(20), default="貸出可能")
-    thumbnail = db.Column(db.String(300)) # 画像URL保存用
+    thumbnail = db.Column(db.String(300)) # 画像URL用
 
-# 2. 予約情報のモデル
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.String(10), nullable=False)    # 月〜金
     slot = db.Column(db.Integer, nullable=False)     # 1〜5コマ
     user_name = db.Column(db.String(100), default="予約済み")
 
-# 3. 掲示板のモデル
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(500), nullable=False)  # 投稿内容
-    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 日本時間
-    user_ip = db.Column(db.String(50)) # 投稿者のIPアドレス
+    content = db.Column(db.String(500), nullable=False)
+    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST')))
+    user_ip = db.Column(db.String(50))
 
 # データベースの初期化
 with app.app_context():
@@ -45,31 +42,27 @@ with app.app_context():
 
 # --- ルーティング ---
 
-# ホーム画面（蔵書一覧）
 @app.route('/')
 def index():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
-# リアルタイム利用状況ページ
 @app.route("/status")
 def status():
     jst = timezone(timedelta(hours=+9), 'JST')
     now = datetime.now(jst)
-    
     days = ['月', '火', '水', '木', '金', '土', '日']
     current_day = days[now.weekday()]
 
     hour = now.hour
     current_slot = 0
-    # ここで時間割判定
     if 9 <= hour < 10: current_slot = 1
     elif 10 <= hour < 12: current_slot = 2
     elif 13 <= hour < 15: current_slot = 3
     elif 15 <= hour < 17: current_slot = 4
     elif 17 <= hour < 19: current_slot = 5
 
-    # 全ての変数が揃ってからDEBUG表示（エラー回避）
+    # 全ての変数が揃ってからDEBUG表示
     print(f"DEBUG: 判定時刻={hour}時, 曜日={current_day}, スロット={current_slot}")
 
     active_reservation = Reservation.query.filter_by(day=current_day, slot=current_slot).first()
@@ -79,14 +72,12 @@ def status():
                         day=current_day, 
                         slot=current_slot)
 
-# 予約一覧・管理ページ
 @app.route('/history')
 def history():
     all_res = Reservation.query.all()
     res_dict = {(r.day, r.slot): r.user_name for r in all_res}
     return render_template('history.html', reservations=res_dict)
 
-# 予約・キャンセル実行
 @app.route('/reserve', methods=['POST'])
 def reserve():
     day = request.form.get('day')
@@ -106,17 +97,14 @@ def reserve():
     db.session.commit()
     return redirect(url_for('history'))
 
-# 掲示板表示
 @app.route('/talk')
 def board():
     messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
     return render_template('talk.html', messages=messages)
 
-# 掲示板への投稿
 @app.route('/post_message', methods=['POST'])
 def post_message():
     content = request.form.get('content')
-    # プロキシ環境（Render等）でも正しくIPを取るための設定
     client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
     if content:
@@ -126,7 +114,6 @@ def post_message():
     
     return redirect(url_for('board'))
 
-# --- 蔵書管理：ISBN自動登録 ---
 @app.route("/add_by_isbn", methods=["POST"])
 def add_by_isbn():
     isbn = request.form.get("isbn")
@@ -136,16 +123,13 @@ def add_by_isbn():
         data = response.json()
         if "items" in data:
             book_info = data["items"][0]["volumeInfo"]
-            
-            # 画像URLの取得
             image_links = book_info.get("imageLinks", {})
-            thumbnail_url = image_links.get("thumbnail") # 正しいスペル
+            thumbnail_url = image_links.get("thumbnail")
             
             title = book_info.get("title", "不明なタイトル")
             author_list = book_info.get("authors", ["不明な著者"])
             author = ",".join(author_list)
             
-            # データベースに保存
             new_book = Book(
                 title=title, 
                 author=author, 
@@ -160,7 +144,6 @@ def add_by_isbn():
         print(f"ERROR: {e}")
         return f"エラー: {str(e)}", 500
 
-# 本の個別貸出・返却
 @app.route('/borrow/<int:book_id>', methods=['POST'])
 def borrow_book(book_id):
     book = db.session.get(Book, book_id)
@@ -177,7 +160,6 @@ def return_book(book_id):
         db.session.commit()
     return redirect(url_for('index'))
 
-# 本の削除機能（あとでHTMLにボタンを付ける用）
 @app.route('/delete/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
     book = db.session.get(Book, book_id)
