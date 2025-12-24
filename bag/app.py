@@ -23,6 +23,7 @@ class Book(db.Model):
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), default="不明な著者")
     status = db.Column(db.String(20), default="貸出可能")
+    thumbnail = db.Column(db.String(300))
 
 # 2. 予約情報のモデル
 class Reservation(db.Model):
@@ -131,10 +132,13 @@ def add_by_isbn():
         data = response.json()
         if "items" in data:
             book_info = data["items"][0]["volumeInfo"]
+            image_links=book_info.get("imageLinks",{})
+            thumbail_url=image_links.get("thumbnail")
+            
             title = book_info.get("title", "不明なタイトル")
             author_list = book_info.get("authors", ["不明な著者"])
             author = ",".join(author_list)
-            new_book = Book(title=title, author=author, status="蔵書")
+            new_book = Book(title=title, author=author, status="蔵書",thumbnail=thumbnail_url)
             db.session.add(new_book)
             db.session.commit()
             return redirect("/")

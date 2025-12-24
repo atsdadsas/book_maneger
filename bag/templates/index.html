@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>図書貸し出し管理システム</title>
+    <title>部室貸し出し管理システム</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <style>
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
@@ -23,7 +23,7 @@
     <div class="container">
         <div class="nav-buttons">
             <a href="/" class="btn btn-gray">ホームに戻る</a>
-            <a href="/history" class="btn btn-green">図書館の利用予約</a>
+            <a href="/history" class="btn btn-green">部室の利用予約</a>
             <a href="/talk" class="btn btn-gray">掲示板に移動</a>
         </div>
 
@@ -43,25 +43,38 @@
 
         <div class="book-list-section">
             <h2>現在の蔵書一覧</h2>
-            <ul>
-                {% for book in books %}
-                <li>
-                    <div>
-                        {{ book.title }} 
-                        <span class="status-badge">[{{ book.status }}]</span>
-                    </div>
-                    {% if book.status == "貸出可能" %}
-                    <form action="/borrow/{{ book.id }}" method="POST">
-                        <button type="submit" class="btn" style="background-color: #e1f5fe; border: 1px solid #01579b; color: #01579b; padding: 5px 15px;">借りる</button>
-                    </form>
-                    {% else %}
-                    <form action="/return/{{ book.id }}" method="POST">
-                        <button type="submit" class="btn" style="background-color: #fff9c4; border: 1px solid #fbc02d; color: #856404; padding: 5px 15px;">返す</button>
-                    </form>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
+<ul>
+    {% for book in books %}
+    <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+        
+        <div style="flex-shrink: 0; margin-right: 15px;">
+            {% if book.thumbnail %}
+                <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; height: auto; border-radius: 4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+            {% else %}
+                <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; border-radius: 4px;">No Image</div>
+            {% endif %}
+        </div>
+
+        <div style="flex-grow: 1;">
+            <div style="font-weight: bold; font-size: 1.1em;">{{ book.title }}</div>
+            <div style="color: #666; font-size: 0.9em;">著者: {{ book.author }}</div>
+            <span class="status-badge">[{{ book.status }}]</span>
+        </div>
+
+        <div style="flex-shrink: 0;">
+            {% if book.status == "貸出可能" %}
+            <form action="/borrow/{{ book.id }}" method="POST" style="margin: 0;">
+                <button type="submit" class="btn" style="background-color: #e1f5fe; border: 1px solid #01579b; color: #01579b; padding: 5px 15px; cursor: pointer;">借りる</button>
+            </form>
+            {% else %}
+            <form action="/return/{{ book.id }}" method="POST" style="margin: 0;">
+                <button type="submit" class="btn" style="background-color: #fff9c4; border: 1px solid #fbc02d; color: #856404; padding: 5px 15px; cursor: pointer;">返す</button>
+            </form>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
         </div>
     </div>
 
