@@ -37,7 +37,12 @@ class Post(db.Model):
     user_ip = db.Column(db.String(50))
 
 # データベースの初期化
+    # データベースの初期化部分をこのように一時変更
 with app.app_context():
+    # 一度すべてのテーブルを削除（これで古い設計図を消去！）
+    # db.drop_all()  # ← 初回デプロイ時だけこのコメントアウトを外す
+    
+    # 新しい設計図（thumbnail入り）で作り直す
     db.create_all()
 
 # --- ルーティング ---
