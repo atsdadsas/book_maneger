@@ -23,7 +23,7 @@ class Book(db.Model):
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), default="不明な著者")
     status = db.Column(db.String(20), default="貸出可能")
-    thumbnail = db.Column(db.String(300))
+    thumbnail = db.Column(db.String(300)) # 画像URL保存用
 
 # 2. 予約情報のモデル
 class Reservation(db.Model):
@@ -36,7 +36,7 @@ class Reservation(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)  # 投稿内容
-    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 日本時間で投稿
+    posted_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone(timedelta(hours=+9), 'JST'))) # 日本時間
     user_ip = db.Column(db.String(50)) # 投稿者のIPアドレス
 
 # データベースの初期化
@@ -62,13 +62,15 @@ def status():
 
     hour = now.hour
     current_slot = 0
-    print(f"DEBUG: 今は{current_day}曜日の{current_slot}コマ目として探しています") # これを追加！
-
+    # ここで時間割判定
     if 9 <= hour < 10: current_slot = 1
     elif 10 <= hour < 12: current_slot = 2
     elif 13 <= hour < 15: current_slot = 3
     elif 15 <= hour < 17: current_slot = 4
     elif 17 <= hour < 19: current_slot = 5
+
+    # 全ての変数が揃ってからDEBUG表示（エラー回避）
+    print(f"DEBUG: 判定時刻={hour}時, 曜日={current_day}, スロット={current_slot}")
 
     active_reservation = Reservation.query.filter_by(day=current_day, slot=current_slot).first()
 
@@ -77,7 +79,7 @@ def status():
                         day=current_day, 
                         slot=current_slot)
 
-# 予約一覧・管理ページ（カレンダー）
+# 予約一覧・管理ページ
 @app.route('/history')
 def history():
     all_res = Reservation.query.all()
@@ -107,7 +109,6 @@ def reserve():
 # 掲示板表示
 @app.route('/talk')
 def board():
-    # 最新の20件を表示
     messages = Post.query.order_by(Post.posted_at.desc()).limit(20).all()
     return render_template('talk.html', messages=messages)
 
@@ -115,6 +116,7 @@ def board():
 @app.route('/post_message', methods=['POST'])
 def post_message():
     content = request.form.get('content')
+    # プロキシ環境（Render等）でも正しくIPを取るための設定
     client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
 
     if content:
@@ -124,7 +126,7 @@ def post_message():
     
     return redirect(url_for('board'))
 
-# --- 蔵書管理系ルーティング ---
+# --- 蔵書管理：ISBN自動登録 ---
 @app.route("/add_by_isbn", methods=["POST"])
 def add_by_isbn():
     isbn = request.form.get("isbn")
@@ -134,29 +136,31 @@ def add_by_isbn():
         data = response.json()
         if "items" in data:
             book_info = data["items"][0]["volumeInfo"]
-            image_links=book_info.get("imageLinks",{})
-            thumbnail_url=image_links.get("thumbnail")
+            
+            # 画像URLの取得
+            image_links = book_info.get("imageLinks", {})
+            thumbnail_url = image_links.get("thumbnail") # 正しいスペル
             
             title = book_info.get("title", "不明なタイトル")
             author_list = book_info.get("authors", ["不明な著者"])
             author = ",".join(author_list)
-            new_book = Book(title=title, author=author, status="蔵書",thumbnail=thumbnail_url)
+            
+            # データベースに保存
+            new_book = Book(
+                title=title, 
+                author=author, 
+                status="貸出可能", 
+                thumbnail=thumbnail_url
+            )
             db.session.add(new_book)
             db.session.commit()
             return redirect("/")
         return "本が見つかりませんでした", 404
     except Exception as e:
+        print(f"ERROR: {e}")
         return f"エラー: {str(e)}", 500
 
-@app.route('/add', methods=['POST'])
-def add_book():
-    title = request.form.get('book_name')
-    if title:
-        new_book = Book(title=title)
-        db.session.add(new_book)
-        db.session.commit()
-    return redirect(url_for('index'))
-
+# 本の個別貸出・返却
 @app.route('/borrow/<int:book_id>', methods=['POST'])
 def borrow_book(book_id):
     book = db.session.get(Book, book_id)
@@ -170,6 +174,15 @@ def return_book(book_id):
     book = db.session.get(Book, book_id)
     if book:
         book.status = "貸出可能"
+        db.session.commit()
+    return redirect(url_for('index'))
+
+# 本の削除機能（あとでHTMLにボタンを付ける用）
+@app.route('/delete/<int:book_id>', methods=['POST'])
+def delete_book(book_id):
+    book = db.session.get(Book, book_id)
+    if book:
+        db.session.delete(book)
         db.session.commit()
     return redirect(url_for('index'))
 
