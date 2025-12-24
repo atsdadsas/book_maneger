@@ -59,6 +59,7 @@ def status():
     
     days = ['月', '火', '水', '木', '金', '土', '日']
     current_day = days[now.weekday()]
+    print(f"DEBUG: 今は{current_day}曜日の{current_slot}コマ目として探しています") # これを追加！
 
     hour = now.hour
     current_slot = 0
