@@ -25,3 +25,21 @@
     /* 色のバリエーション */
     .btn-green { background-color: #4CAF50; color: white; }
     .btn-gray  { background-color: #757575; color: white; }
+
+    .bottom-botan{
+display: inline-block;
+        position:fixed;
+        bottom:30px;
+        right:20px;
+        background-color: #007bff;
+        color:white;
+        border-radius:5px;
+        text-decoration:none;
+    }
+.next-page-container {
+    text-align: right;    /* 中にあるボタンを右に寄せる */
+    margin-top: 30px;     /* 一覧との間に隙間を作る */
+    margin-bottom: 30px;  /* 画面の一番下から30px浮かせる */
+    padding-right: 10px;  /* 右端にぴったりくっつかないよう微調整 */
+}
+

@@ -52,6 +52,11 @@ def index():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
+@app.route('/index2')
+def next_page():
+    # ここで templates/index2.html を読み込んでブラウザに送る
+    return render_template('index2.html')
+
 @app.route("/status")
 def status():
     jst = timezone(timedelta(hours=+9), 'JST')
