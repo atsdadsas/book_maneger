@@ -13,13 +13,13 @@ jobs:
 
       - name: Deploy and Restart App
         run: |
-          # 1. アプリのディレクトリへ移動
+          # 1. 確実にアプリのフォルダへ移動
           cd /home/nattu/book_maneger/bag
           
-          # 2. GitHubから最新コードを反映
+          # 2. 最新コードを反映
           git pull origin main
           
-          # 3. 古いFlaskを停止（実行中なら止める）
+          # 3. 古いFlaskを止める
           pkill -f app.py || true
           
           # 4. バックグラウンドで起動してログを保存
