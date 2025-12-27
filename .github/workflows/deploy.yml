@@ -29,3 +29,4 @@ jobs:
           # 5. 起動を確認するために少し待つ
           sleep 5
           cat flask.log
+          python3 app.py
