@@ -11,25 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug and Deploy
+      - name: Deploy and Restart App
         run: |
-          echo "--- Current Directory ---"
-          pwd
-          
-          echo "--- Checking File Location ---"
-          # app.pyがどこにあるか探す
-          find . -name "app.py"
-          
-          echo "--- Attempting to Start ---"
           cd /home/nattu/book_maneger/bag
           
-          # 以前のプロセスを確実に殺す（-9で強制終了）
+          # 1. 以前のプログラムを完全に停止
           pkill -9 -f app.py || true
           
-          # 起動して、もしエラーが出たら即座に表示させる
-          # nohupを使わずに一度普通に実行してログに残るか試す
-          python3 app.py > flask.log 2>&1 &
+          # 2. 最新コードを反映
+          git pull origin main || true
           
-          # 3秒待ってからログの中身を表示
-          sleep 3
-          cat flask.log
+          # 3. バックグラウンド起動
+          export FLASK_DEBUG=0
+          nohup python3 app.py > flask.log 2>&1 &
+          
+          # 4. 起動を少し待ってから終了
+          sleep 2
