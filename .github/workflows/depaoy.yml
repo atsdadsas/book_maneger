@@ -13,16 +13,14 @@ jobs:
 
       - name: Deploy and Restart App
         run: |
-          # 1. 確実にアプリのフォルダへ移動する（絶対パス指定）
+          # 1. アプリのディレクトリへ移動
           cd /home/nattu/book_maneger/bag
           
-          # 2. GitHubから最新のコードを取り込む
+          # 2. GitHubから最新コードを反映
           git pull origin main
           
-          # 3. 今動いている古いアプリを完全に終了させる
-          # ※これをしないと「ポート使用中」で新しいアプリが起動できません
+          # 3. 古いFlaskを停止（実行中なら止める）
           pkill -f app.py || true
           
-          # 4. バックグラウンドでアプリを起動する
-          # ログを flask.log に書き出し、画面を閉じても動き続けるようにします
+          # 4. バックグラウンドで起動してログを保存
           nohup python3 app.py > flask.log 2>&1 &
