@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="test.css"> 
+
+<link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>図書館利用予約 - 図書管理システム</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
+        th { background-color: #eee; }
+        .status-reserved { color: #d32f2f; font-weight: bold; }
+        .status-available { color: #4CAF50; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="btn btn-gray">← ホームに戻る</a>
+
+    <div class="container">
+        <h1>現在の利用状況</h1>
+        <div class="current-info" style="padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
+            <p>今は <strong>{{ day }}曜日 {{ slot }}コマ目</strong> です。</p>
+        {% if res %}
+        <div style="color:#d32f2f;font-size:1.5em;font-weight:bold;">
+            現在利用中です
+        </div>
+        <p>利用者:{{res.user_name}}</p>
+        {% else %}
+        <div style="color:#4CAF50;font-size:1.5em;font-weight: bold;">
+            現在あいてます。
+        </div>
+
+        {% endif %}
+        <a href="{{ url_for('history') }}" class="btn">予約表を見る</a>
+        </div>
+    </div>
+
+
+
+        
+        <h1>図書館 利用予約表（平日）</h1>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>時間 / 曜日</th>
+                    <th>月曜日</th><th>火曜日</th><th>水曜日</th><th>木曜日</th><th>金曜日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in range(1, 6) %}
+                <tr>
+                    <td><strong>{{ slot }}コマ目</strong></td>
+                    {% for day in ['月', '火', '水', '木', '金'] %}
+                    <td>
+                        {# Python側の res_dict = {(r.day, r.slot): ...} と合わせる #}
+                        {% if (day, slot|int) in reservations %}
+                            <span class="status-reserved">閉</span><br>
+                            <form action="/reserve" method="POST" style="margin-top: 5px;">
+                                <input type="hidden" name="day" value="{{ day }}">
+                                <input type="hidden" name="slot" value="{{ slot }}">
+                                <button type="submit" class="btn btn-gray" style="padding: 2px 5px; font-size: 10px;">取消</button>
+                            </form>
+                        {% else %}
+                            <span class="status-available">開</span><br>
+                            <form action="/reserve" method="POST" style="margin-top: 5px;">
+                                <input type="hidden" name="day" value="{{ day }}">
+                                <input type="hidden" name="slot" value="{{ slot }}">
+                                <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 12px;background-color: #0000FF;">　　</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
