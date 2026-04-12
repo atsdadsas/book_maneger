@@ -1,0 +1,39 @@
+ーーーーコマンド一覧
+
+**だれが、ポート占領してるか調べる
+netstat -ano | findstr :5000
+
+**ポート開放
+taskkill /F /PID 51844
+taskkill　プロセス終了
+/F 強制的に
+PID プロセスIDを指定
+
+**
+git add .gitignore
+git commit -m "feat: 制作練習ページとルーティングの追加、requirements.txtの作成"
+git push origin main
+
+送信データの確認
+git status
+
+送信データリセット
+git rm -r --cached .
+
+ーーーーメモ帳
+TCP 0.0.0.0:5000 0.0.0.0:0 LISTENING 51844
+TCP　通信ルール（プロトコル）
+0.0.0.0は誰からでもOKという意味
+LISTENING　応答中
+51844　お客様。この人が帰らないと他の人の対応できない。うっざ
+127.0.0.1（localhost）: 自分のパソコンのこと
+
+githubのデータ保持量（50MB()
+
+50MBは 5000万バイト
+半角一文字　1B
+日本語1文字　3B
+
+なので1666万文字くらいならセーフ
+テキストならほぼ無限
+画像はすこしならOK 

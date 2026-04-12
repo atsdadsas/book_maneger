@@ -1,0 +1,59 @@
+
+    /* 箱の設定 */
+    .container { 
+        max-width: 800px; 
+        margin: 50px auto; /* 上下に50pxの隙間を開けて中央寄せ */
+        background: rgb(255, 255, 255); 
+        padding: 40px; 
+        border-radius: 12px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        text-align: center; /* 中身のボタンを真ん中に寄せる */
+    }
+
+    /* ボタンの共通設計図（paddingなどはここに1回書くだけ！） */
+    .btn {
+        /* ↓縦並びにさせる効果 */
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        margin: 5px; /* ボタン同士がくっつかないように隙間を作る */
+    }
+/* 縦並び用 */
+    .btn_row {
+        display: block;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        margin: 5px; /* ボタン同士がくっつかないように隙間を作る */
+    }
+
+
+    /* 色のバリエーション */
+    .btn-green { background-color: #4CAF50; color: white; }
+    .btn-gray  { background-color: #757575; color: white; }
+    .btn-green_light  { background-color: #4b8021; color: white; }
+
+    .bottom-botan{
+display: inline-block;
+        position:fixed;
+        bottom:30px;
+        right:20px;
+        background-color: #007bff;
+        color:white;
+        border-radius:5px;
+        text-decoration:none;
+    }
+.next-page-container {
+    text-align: right;    /* 中にあるボタンを右に寄せる */
+    margin-top: 30px;     /* 一覧との間に隙間を作る */
+    margin-bottom: 30px;  /* 画面の一番下から30px浮かせる */
+    padding-right: 10px;  /* 右端にぴったりくっつかないよう微調整 */
+}
+
