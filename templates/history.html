@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>図書館利用予約 - 図書管理システム</title>
+    <title>部室利用予約 - 図書管理システム</title>
     <style>
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
@@ -31,12 +31,12 @@
                 <p>利用者: {{ res.user_name }}</p>
             {% else %}
                 <div style="color:#4CAF50;font-size:1.5em;font-weight: bold;">
-                    現在あいてます。
+                    現在閉まってます。
                 </div>
             {% endif %}
         </div>
 
-        <h1>図書館 利用予約表（平日）</h1>
+        <h1>部室 利用予約表（平日）</h1>
         
         <table>
             <thead>
