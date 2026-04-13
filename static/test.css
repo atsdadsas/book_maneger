@@ -57,3 +57,76 @@ display: inline-block;
     padding-right: 10px;  /* 右端にぴったりくっつかないよう微調整 */
 }
 
+/* 画面を黒くする */
+#opening-overlay{
+    /* 画面の定位置を固定する */
+    position:fixed;
+    top: 0;
+    left: 0;
+
+    /* 画面いっぱいのサイズにする */
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    /* 画面の一番上に表示する */
+    z-index: 9999;
+
+}
+.no-scroll {
+    overflow: hidden; /* スクロールを禁止する */
+}
+
+/* 丸を入れるお皿（container）の設定 */
+#circle-container {
+    /* 1. 配置の基本設定 */
+    display: flex;
+    flex-wrap: wrap;       /* ★超重要：横幅がいっぱいになったら自動で改行する */
+    justify-content: center; /* 横方向の中央寄せ */
+    align-items: center;     /* 縦方向の中央寄せ */
+    gap: 20px;               /* 丸と丸の「縦・横」の間隔 */
+
+    /* 2. サイズの設定? */
+    width: 600px;           /* ★横幅を制限することで、5~6個ごとに改行させます */
+    height: auto;           /* 高さは中身に合わせて自動で伸びるようにする */
+    
+    /* 3. 画面の真ん中に置くための設定 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 画面のド真ん中に固定 */
+}
+
+/* 白い〇を描画するキャンパスの作成 */
+.white-circle {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(0, 0, 0);
+    /* 丸くする □の半分＊４丸くすると円 */
+    border-radius: 50%;
+    color: rgb(255, 255, 255) !important;
+    /* ↓これらを追加！文字を中央に集める */
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* ミリ単位で位置を指定するために絶対配置を使用 */
+    /* position: absolute; */
+}
+
+#opening-text {
+    /* 丸たちの真上に浮かせる魔法 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* 文字のデザイン */
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 5px; /* 文字の間隔を広げてかっこよく */
+    z-index: 10;        /* 丸（デフォルトは0）より手前に出す */
+    
+    /* 最初は隠しておいて、あとでJSやアニメで出すことも可能 */
+    white-space: nowrap; /* 改行させない */
+}

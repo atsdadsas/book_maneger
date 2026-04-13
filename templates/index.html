@@ -3,27 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>図書・・・・・・・・・・・・・・・・・・・・・・・・・・・・部室管理システム</title>
+    <title>部室管理システム</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <style>
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
         ul { list-style: none; padding: 0; }
         .status-badge { font-weight: bold; margin-left: 10px; color: #555; }
-        .nav-buttons { margin-bottom: 20px; display: flex; gap: 10px; }
+        .nav-buttons { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
         #realtime-clock { background: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 5px solid #555; font-weight: bold; }
         .delete-btn { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 0.8em; margin-left: 10px; text-decoration: underline; }
+        .next-page-container { text-align: center; margin-top: 30px; }
+        .bottom-botan { display: inline-block; margin-top: 15px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }
     </style>
 </head>
 <body>
+    <!-- スクロールの禁止 -->
+    <body class="no-scroll"></body>
+    <!-- オーバーレイ -->
+    <div id="opening-overlay">
+        <div id="circle-container">
+            <div id="opening-text"></div>
+        </div>
+    </div>
     <div class="container">
         <div class="nav-buttons">
             <a href="/" class="btn btn-gray">ホーム</a>
             <a href="/history" class="btn btn-green">予約状況</a>
             <a href="/talk" class="btn btn-green">掲示板</a>
-            <a href="/index2" class="btn btn-green">備品管理</a>
+            <a href="{{ url_for('next_page') }}" class="btn btn-green">備品管理</a>
             <a href="/edit" class="btn btn-green">編集履歴</a>
             <a href="/practice" class="btn btn-green">制作練習</a>
-            <a href="/login" class="btn btn-green">ログイン</a>
+            <a href="/login" class="btn btn-gray" target="_blank">ログイン</a>
         </div>
 
         <h1>図書管理システム1</h1>
@@ -62,30 +73,21 @@
 
                     <div style="flex-shrink: 0;">
                         {% if book.status == "貸出可能" %}
-                        <form action="/borrow/{{ book.id }}" method="POST"><button type="submit" class="btn">借りる</button></form>
+                            <form action="/borrow/{{ book.id }}" method="POST"><button type="submit" class="btn">借りる</button></form>
                         {% else %}
-                        <form action="/return/{{ book.id }}" method="POST"><button type="submit" class="btn">返す</button></form>
+                            <form action="/return/{{ book.id }}" method="POST"><button type="submit" class="btn">返す</button></form>
                         {% endif %}
                     </div>
                 </li>
                 {% endfor %}
             </ul>
         </div>
-    </div>
-    <div class="next-page-container"></div>
-            <a href="index2" class="bottom-botan">
-        備品のページへ
-            </a>
+            <h2>調達中！！</h2>
+        <div class="next-page-container">
+            <img id="target-image" src="{{ url_for('static', filename='images/image1.jpg') }}" width="300" alt="部室の画像" style="border-radius: 8px;">
+            <br>
+            <a href="{{ url_for('next_page') }}" class="bottom-botan">備品のページへ</a>
         </div>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short', hour:'2-digit', minute:'2-digit', second:'2-digit' });
-            document.getElementById('realtime-clock').textContent = "現在時刻: " + timeString;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+    </div>
 </body>
 </html>
