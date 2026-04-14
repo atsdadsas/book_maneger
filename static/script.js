@@ -1,18 +1,18 @@
 
 // --- 1. スライドショー機能 ---
 const images = [
-    "/static/images/run/1.jpg",
-    "/static/images/run/2.jpg",
-    "/static/images/run/3.jpg",
-    "/static/images/run/4.jpg",
-    "/static/images/run/5.jpg",
-    "/static/images/run/6.jpg",
-    "/static/images/run/7.jpg",
-    "/static/images/run/6.jpg",
-    "/static/images/run/5.jpg",
-    "/static/images/run/4.jpg",
-    "/static/images/run/3.jpg",
-    "/static/images/run/2.jpg"
+    "/static/images/run2/1.png",
+    "/static/images/run2/2.png",
+    "/static/images/run2/3.png",
+    "/static/images/run2/4.png",
+    "/static/images/run2/5.png",
+    "/static/images/run2/6.png",
+    "/static/images/run2/7.png",
+    "/static/images/run2/6.png",
+    "/static/images/run2/5.png",
+    "/static/images/run2/4.png",
+    "/static/images/run2/3.png",
+    "/static/images/run2/2.png"
 ];
 let currentIndex = 0;
 
@@ -74,7 +74,7 @@ window.onload = function() {
             // 完全に消えたら要素を削除
             setTimeout(() => {
                 overlay.style.display = 'none';
-            }, 1000);
+            }, 500);
         }
-    }, 2000);
+    }, 500);
 };

@@ -7,11 +7,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <style>
+        body {
+                    background-color: rgb(0, 128, 128);
+                    margin: 0;
+                    padding: 0;
+                }
         .book-list-section { border: 2px solid #ccc; padding: 15px; border-radius: 5px; margin-top: 20px; }
         ul { list-style: none; padding: 0; }
         .status-badge { font-weight: bold; margin-left: 10px; color: #555; }
         .nav-buttons { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        #realtime-clock { background: #f9f9f9; padding: 10px; border-radius: 5px; border-left: 5px solid #555; font-weight: bold; }
+        #realtime-clock { padding: 20px; border-radius: 5px; border-left: 5px solid #555; font-weight: bold;    font-family: "MS UI Gothic"; }
         .delete-btn { background: none; border: none; color: #ff4444; cursor: pointer; font-size: 0.8em; margin-left: 10px; text-decoration: underline; }
         .next-page-container { text-align: center; margin-top: 30px; }
         .bottom-botan { display: inline-block; margin-top: 15px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }
@@ -28,29 +33,31 @@
     </div>
     <div class="container">
         <div class="nav-buttons">
-            <a href="/" class="btn btn-gray">ホーム</a>
-            <a href="/history" class="btn btn-green">予約状況</a>
-            <a href="/talk" class="btn btn-green">掲示板</a>
-            <a href="{{ url_for('next_page') }}" class="btn btn-green">備品管理</a>
-            <a href="/edit" class="btn btn-green">編集履歴</a>
-            <a href="/practice" class="btn btn-green">制作練習</a>
-            <a href="/login" class="btn btn-gray" target="_blank">ログイン</a>
+            <a href="/" class="btn btn-gray f1">ホーム</a>
+            <a href="/history" class="btn btn-gray f1">予約状況</a>
+            <a href="/talk" class="btn btn-gray f1">掲示板</a>
+            <a href="{{ url_for('next_page') }}" class="btn btn-gray f1">備品管理</a>
+            <a href="/edit" class="btn btn-gray f1">編集履歴</a>
+            <a href="/practice" class="btn btn-gray f1">制作練習</a>
+            <a href="/login" class="btn btn-gray f1" target="_blank">ログイン</a>
         </div>
-
-        <h1>図書管理システム1</h1>
+        <div class="window-title-bar">
+        <h1 class="f1">図書管理システム1</h1>
+        </div>
 
         <div id="realtime-clock">時刻を読み込み中...</div>
 
-        <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-            <h3>ISBNでかんたん登録</h3>
+        <div class="container">
+            <h1 class="f1">ISBNでかんたん登録</h1>
             <form action="/add_by_isbn" method="POST">
                 <input type="text" name="isbn" placeholder="ISBNを入力" required style="padding: 8px;">
-                <button type="submit" class="btn btn-green">自動登録</button>
+                <button type="submit" class="btn btn-gray">自動登録</button>
             </form>
         </div>
 
-        <div class="book-list-section">
+            <div class="container">
             <h2>現在の蔵書一覧</h2>
+            </div>
             <ul>
                 {% for book in books %}
                 <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
@@ -82,11 +89,14 @@
                 {% endfor %}
             </ul>
         </div>
-            <h2>↓調子がいいと動く（走る）</h2>
-        <div class="next-page-container">
-            <img id="target-image" src="{{ url_for('static', filename='images/image1.jpg') }}" width="300" alt="部室の画像" style="border-radius: 8px;">
-            <br>
-            <a href="{{ url_for('next_page') }}" class="bottom-botan">備品のページへ</a>
+            <div class="container">
+                <p class="f1">↓回線の調子がいいと動く（走る）</p>
+                <div class="next-page-container">
+                    <img id="target-image" src="{{ url_for('static', filename='images/image1.jpg') }}" width="300" alt="部室の画像" style="border-radius: 8px;">
+                    <br>
+                </div>  
+            </div>
+            <!-- <a href="{{ url_for('next_page') }}" class="bottom-botan">備品のページへ</a> -->
         </div>
     </div>
 </body>
