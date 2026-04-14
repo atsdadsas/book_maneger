@@ -13,30 +13,37 @@
 }
 
 /* 箱の設定 */
-    .container { 
-        max-width: 1000px; 
-        width: 90%;
-        margin-left :  20px;
-        margin-right:auto;
-        margin-top: 5px;
-        /* margin-bottom: 20px; */
-        background: rgb(192, 192, 192); 
-        /* padding: (上の隙間)タイトルバーがあるので狭め */
-        padding: 10px; 
-        /* 丸み */
-        border-radius: 0px; 
-        /* ★立体感を出すCSS */
-    /* 1. まず内側にハイライト（光）を入れる */
-        box-shadow: 
-        inset 1px 1px 0px 0px rgba(255, 255, 255, 1.0), /* 左と上の白 */
-        inset -1px -1px 0px 0px rgba(0, 0, 0, 1.0); /* 右と下の黒 */
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-    /* 2. さらに外側に境界線を追加して、合計3層の立体感にする */
-        border: 1px solid black; /* 外側の黒線 */
-        border-top: 1px solid rgb(223, 223, 223); /* 上の薄い白線 */
-        border-left: 1px solid rgb(223, 223, 223); /* 左の薄い白線 */
-        text-align: center; /* 中身のボタンを真ん中に寄せる */
-    }
+.container { 
+    max-width: 1000px; 
+    width: 90%;
+    margin-left: 20px;
+    margin-right: auto;
+    margin-top: 5px;
+    /* margin-bottom: 20px; */
+    
+    background: rgb(192, 192, 192); 
+    padding: 10px; 
+    border-radius: 0px; 
+
+    box-shadow: 
+        inset 1px 1px 0px 0px rgba(255, 255, 255, 1.0), /* 左と上の白ライン */
+        inset -1px -1px 0px 0px rgba(0, 0, 0, 1.0);    /* 右と下の黒ライン */
+
+    /* 外側の境界線（合計3層の立体感） */
+    border: 1px solid black;
+    border-top: 1px solid rgb(223, 223, 223);
+    border-left: 1px solid rgb(223, 223, 223);
+    
+    text-align: center;
+}
+
+.frame {
+    border: 2px solid rgb(192, 192, 192); /* 真っ黒な細い線 */
+    padding: 1px;           /* ← これが重要！内側のcontainerとの間にわずかな隙間を作る */
+    display: inline-block;  /* 中身のサイズに合わせる設定 */
+    width: 90%;             /* containerと同じ幅感にする */
+    max-width: 1004px;      /* borderの分、少しだけ広めに設定 */
+}
 
     /* ボタンの共通設計図（paddingなどはここに1回書くだけ！） */
     .btn {
