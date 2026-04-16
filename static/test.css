@@ -1,7 +1,7 @@
 
     /* タイトルバー */
 .window-title-bar {
-    background: rgb(0, 0, 128); /* 深い青 */
+    background: linear-gradient(to right, rgb(0, 0, 128), rgb(51, 80, 247)); /* 深い青 */
     color: white;
     font-family: "MS UI Gothic", "Arial", sans-serif;
     font-size: 14px;
@@ -16,7 +16,7 @@
 .container { 
     max-width: 1000px; 
     width: 90%;
-    margin-left: 20px;
+    margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
     /* margin-bottom: 20px; */
@@ -33,7 +33,6 @@
     border: 1px solid black;
     border-top: 1px solid rgb(223, 223, 223);
     border-left: 1px solid rgb(223, 223, 223);
-    
     text-align: center;
 }
 
@@ -182,4 +181,36 @@ h1.f1 {
     
     /* 最初は隠しておいて、あとでJSやアニメで出すことも可能 */
     white-space: nowrap; /* 改行させない */
+}
+.row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.main-layout {
+    display: flex;       /* 横並びにする */
+    justify-content: center; /* 中央に寄せて並べる */
+    gap: 10px;           /* 箱と箱の間のスキマ */
+    align-items: flex-start; /* 箱の高さが違っても、上揃えにする */
+    margin: 20px;
+}
+.side-panel {
+    width: 500px;
+    max-width: 90%;
+    background-color: rgb(192, 192, 192); /* 同じレトログレーにする */
+    border: 1px solid black;
+    padding: 1px;
+    /* containerと同じ立体感をつけると統一感が出ます */
+}
+.side-column {
+    display: flex;             /* 1. 中身を自由に並べられるようにする */
+    flex-direction: column;    /* 2. 中身を「縦（列）」に並べる（超重要！） */
+    gap: 20px;                 /* 3. 箱と箱の間のスキマを作る */
+    width: 250px;              /* 4. 右側のエリアの幅を決める */
+    flex-shrink: 0;            /* 5. 画面が狭くなっても潰れないようにする */
+}
+.side-column2 {
+    display: flex;             /* 1. 中身を自由に並べられるようにする */
+    width: 1000px;
+    padding-left: 50px;
 }
