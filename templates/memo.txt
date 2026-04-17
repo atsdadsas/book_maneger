@@ -1,0 +1,2 @@
+git status 保存の確認
+git reset 白紙に
