@@ -37,83 +37,85 @@
 ---------------------------------------------------------------- -->
     <div class="main-layout">
         <div class="side-column2">
-        <div class="container frame">
-            <div class ="window-title-bar">
-                <div class="f1">3C Unofficial Site</div>
-            </div>
-            <div class="nav-buttons">
-                <a href="/" class="btn btn-gray f1">Home</a>
-                <a href="/history" class="btn btn-gray f1">Reservatiom</a>
-                <a href="/talk" class="btn btn-gray f1">Massage Board</a>
-                <a href="{{ url_for('next_page') }}" class="btn btn-gray f1">Supplies </a>
-                <a href="/edit" class="btn btn-gray f1">Edit History</a>
-                <a href="/practice" class="btn btn-gray f1">Practice</a>
-                <a href="/login" class="btn btn-gray f1" target="_blank">Login</a>
-            </div>
-<!-- ----------------------------------------------------------------
-図書管理システム
----------------------------------------------------------------- -->
-            <div class="Window-Title-Bar">
-            <h1 class="f1">Library Management System</h1>
-            </div>
-
-            <div id="realtime-clock">時刻を読み込み中...</div>
-
-            <div class="container">
-                <h1 class="f1">Register by ISBN</h1>
-                <form action="/add_by_isbn" method="POST">
-                    <input type="text" name="isbn" placeholder="Enter the ISBN" required style="padding: 8px;">
-                    <button type="submit" class="btn btn-gray">auto register    </button>
-                </form>
-            </div>
-
-<!-- ----------------------------------------------------------------
-database
----------------------------------------------------------------- -->
-                <div class="container">
-                <h2>Current Book Inventory</h2>
+            <div class="container frame">
+                <div class="container frame">
+                    <div class ="window-title-bar">
+                        <div class="f1">3C Unofficial Site</div>
+                    </div>
+                    <div class="nav-buttons">
+                        <a href="/" class="btn btn-gray f1">Home</a>
+                        <a href="/history" class="btn btn-gray f1">Reservatiom</a>
+                        <a href="/talk" class="btn btn-gray f1">Massage Board</a>
+                        <a href="{{ url_for('next_page') }}" class="btn btn-gray f1">Supplies </a>
+                        <a href="/edit" class="btn btn-gray f1">Edit History</a>
+                        <a href="/practice" class="btn btn-gray f1">Practice</a>
+                        <a href="/login" class="btn btn-gray f1" target="_blank">Login</a>
+                    </div>
                 </div>
-                <ul>
-                    {% for book in books %}
-                    <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                        <div style="flex-shrink: 0; margin-right: 15px;">
-                            {% if book.thumbnail %}
-                                <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; border-radius: 4px;">
-                            {% else %}
-                                <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>
-                            {% endif %}
-                        </div>
-                        <div style="flex-grow: 1;">
-                            <div style="font-weight: bold;">{{ book.title }}</div>
-                            <div style="font-size: 0.8em; color: #666;">著者: {{ book.author }}</div>
-                            <span class="status-badge">[{{ book.status }}]</span>
-                            <form action="/delete/{{ book.id }}" method="POST" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
-                                <button type="submit" class="delete-btn">削除</button>
-                            </form>
-                        </div>
-                        <div style="flex-shrink: 0;">
-                            {% if book.status == "Available for rent" %}
-                                <form action="/borrow/{{ book.id }}" method="POST"><button type="submit" class="btn">借りる</button></form>
-                            {% else %}
-                                <form action="/return/{{ book.id }}" method="POST"><button type="submit" class="btn">返す</button></form>
-                            {% endif %}
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <br>
-                <hr>
-                <br>
-<!-- ----------------------------------------------------------------
-下のコンテナ
----------------------------------------------------------------- -->
-            <div class="container">
-            <div class="window-title-bar">It works (runs) when the connection is good</div>
-                <img id="target-image" src="{{ url_for('static', filename='images/image1.jpg') }}" width="300" alt="部室の画像" style="border-radius: 8px;">
+    <!-- ----------------------------------------------------------------
+    図書管理システム
+    ---------------------------------------------------------------- -->
+                <div class="Window-Title-Bar">
+                <h1 class="f1">Library Management System</h1>
+                </div>
+
+                <div id="realtime-clock">時刻を読み込み中...</div>
+
+                <div class="container">
+                    <h1 class="f1">Register by ISBN</h1>
+                    <form action="/add_by_isbn" method="POST">
+                        <input type="text" name="isbn" placeholder="Enter the ISBN" required style="padding: 8px;">
+                        <button type="submit" class="btn btn-gray">auto register    </button>
+                    </form>
+                </div>
+
+    <!-- ----------------------------------------------------------------
+    database
+    ---------------------------------------------------------------- -->
+                    <div class="container">
+                    <h2>Current Book Inventory</h2>
+                    </div>
+                    <ul>
+                        {% for book in books %}
+                        <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                            <div style="flex-shrink: 0; margin-right: 15px;">
+                                {% if book.thumbnail %}
+                                    <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; border-radius: 4px;">
+                                {% else %}
+                                    <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>
+                                {% endif %}
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold;">{{ book.title }}</div>
+                                <div style="font-size: 0.8em; color: #666;">著者: {{ book.author }}</div>
+                                <span class="status-badge">[{{ book.status }}]</span>
+                                <form action="/delete/{{ book.id }}" method="POST" style="display: inline;" onsubmit="return confirm('本当に削除しますか？');">
+                                    <button type="submit" class="delete-btn">削除</button>
+                                </form>
+                            </div>
+                            <div style="flex-shrink: 0;">
+                                {% if book.status == "Available for rent" %}
+                                    <form action="/borrow/{{ book.id }}" method="POST"><button type="submit" class="btn">借りる</button></form>
+                                {% else %}
+                                    <form action="/return/{{ book.id }}" method="POST"><button type="submit" class="btn">返す</button></form>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    <hr>
+                    <br>
+    <!-- ----------------------------------------------------------------
+    下のコンテナ
+    ---------------------------------------------------------------- -->
+                <div class="container">
+                    <div class="window-title-bar">It works (runs) when the connection is good</div>
+                    <img id="target-image" src="{{ url_for('static', filename='images/image1.jpg') }}" width="300" alt="部室の画像" style="border-radius: 8px;">
+                </div>
             </div>
         </div>
-    </div>
-<!-- ----------------------------------------------------------------
+<!-- <!-- ----------------------------------------------------------------
 中のコンテナ
 ---------------------------------------------------------------- -->
         <div class="side-column">
@@ -147,31 +149,26 @@ database
                 <p>Thank you for your cooperation</p>
             </div>
         </div>
-                <!-- <div class="side-panel container" style="margin-right: +20px; margin-top: -60px; height: 300px;">
-                <div class="window-title-bar">Comments</div>
-                <div class="f1"style="text-align: left; margin: 10px;">
-                <p>Books currently on loan</p>
-                <p><s>The “3-Minute Cooking” Book</s></p>
-                <p>A Book About Traveling Around the World</p>
-                <p>END OF QUESTIONS??</p>
-                <p>
-                    <label><input type="radio"name="answer2"checked> Yes</label>
-                    <label><input type="radio"name="answer2"> No</label>
-                </p>
-                <p>Thank you for your cooperation</p>
-            </div>
-        </div> -->
         </div>
 <!-- ----------------------------------------------------------------
 右のコンテナ
 ---------------------------------------------------------------- -->
-            <div class="side-panel container"> <h1 class="window-title-bar">access counter</h1>
+            <div class="side-panel container"style="text-align;left:"> 
+                <h1 class="window-title-bar">access counter</h1>
                                 <!-- <p class="btn btn-gray f1" style="font-size:20px;">Hello</p> -->
                     <img src="{{ url_for('static', filename='images/run2/4-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
             </div>
+<!-- ----------------------------------------------------------------
+右のコンテナおわり
+---------------------------------------------------------------- -->
 </div>
+<!-- ----------------------------------------------------------------
+コンテナおわり
+---------------------------------------------------------------- -->
+
+
 <div class="navi">  
-    <button class="btn btn-gray f1" style="width: 100%; height: 100%;">START</button>
+    <button class="btn btn-gray f1" style="width: 100%; height: 100%;">START</button> -->
 </div>
 </body>
 </html>    
