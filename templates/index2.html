@@ -17,25 +17,25 @@
 <body>
     <div class="container">
         <div class="nav-buttons">
-            <a href="/" class="btn btn-gray">ホーム</a>
-            <a href="/history" class="btn btn-green">予約状況</a>
-            <a href="/talk" class="btn btn-gray">掲示板</a>
+            <a href="/" class="btn btn-gray">Home</a>
+            <a href="/history" class="btn btn-gray">Reservation Status</a>
+            <a href="/talk" class="btn btn-gray">Message Board</a>
         </div>
 
-        <h1>備品管理システム</h1>
+        <h1>Equipment Management System</h1>
 
         <div id="realtime-clock">時刻を読み込み中...</div>
 
         <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-            <h3>ISBNでかんたん登録</h3>
+            <h3>Easy Registration with ISBN</h3>
             <form action="/add_by_isbn" method="POST">
-                <input type="text" name="isbn" placeholder="ISBNを入力" required style="padding: 8px;">
-                <button type="submit" class="btn btn-green">自動登録</button>
+                <input type="text" name="isbn" placeholder="Enter ISBN" required style="padding: 8px;">
+                <button type="submit" class="btn btn-gray">Auto registr</button>
             </form>
         </div>
 
         <div class="book-list-section">
-            <h2>現在の備品一覧</h2>
+            <h2>Current Equipment List</h2>
             <ul>
                 {% for book in books %}
                 <li style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
@@ -43,7 +43,7 @@
                         {% if book.thumbnail %}
                             <img src="{{ book.thumbnail }}" alt="表紙" style="width: 50px; border-radius: 4px;">
                         {% else %}
-                            <div style="width: 50px; height: 70px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>
+                            <div style="width: 50px; height: 70px; background:rgb(128, 128, 128); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>
                         {% endif %}
                     </div>
 

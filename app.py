@@ -246,9 +246,9 @@ def practice():
 def cg():
     return render_template("cg.html")
 
-@app.route("/ship")
-def ship():
-    return render_template("ship.html")
+@app.route("/il")
+def il():
+    return render_template("il.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
