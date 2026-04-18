@@ -16,65 +16,64 @@
 </head>
 <body>
     <div class="container">
-        <a href="{{ url_for('index') }}" class="btn btn-gray">← ホームに戻る</a>
+        <a href="{{ url_for('index') }}" class="btn btn-gray">← Return to Home</a>
 
         <div class="window-title-bar">
-            <h1 class="f1">現在の利用状況</h1>
+            <a class="f1">Current Usage Status</a>
         </div>
 
         <div class="current-info" style="padding: 20px; border-radius: 10px; background-color: rgb(192, 192, 192); margin-bottom: 20px;">
-            <p>今は <strong>{{ day }}曜日 {{ slot }}コマ目</strong> です。</p>
+            <p>It is now <strong>{{ day }} {{ slot }} Period</strong>.</p>
             {% if res %}
                 <div style="color:#000000;font-size:1.5em;font-weight:bold;">
-                    現在利用中です
+                    Currently in use
                 </div>
                 <p>利用者: {{ res.user_name }}</p>
             {% else %}
                 <div style="color:#000000;font-size:1.5em;font-weight: bold;">
-                    現在閉まってます。
+                    We are currently closed
                 </div>
             {% endif %}
         </div>
-         <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+        <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
     </div>
     <div class="container">
-        <h1>部室 利用予約表（平日）</h1>
-        
+        <h1>Room Reservation Form</h1>
         <table>
             <thead>
                 <tr>
-                    <th>時間 / 曜日</th>
-                    <th>月曜日</th><th>火曜日</th><th>水曜日</th><th>木曜日</th><th>金曜日</th>
+                    <th>time / Day</th>
+                    <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>
                 </tr>
             </thead>
             <tbody>
                 {% for current_slot_num in range(1, 6) %}
-                    {# 5コマ目の前に昼休みを挿入 #}
+
                     {% if current_slot_num == 3 %}
                     <tr style="background-color: rgb(192, 192, 192);">
-                        <td><strong>昼休み</strong></td>
-                        <td colspan="5" style="letter-spacing: 1em; font-weight: bold;">休憩時間</td>
+                        <td><strong>breaktime</strong></td>
+                        <td colspan="5" style="letter-spacing: 1em; font-weight: bold;">breaktime</td>
                     </tr>
-                    {% endif %}
+                    {% endif %}<
 
                     <tr>
-                        <td><strong>{{ current_slot_num }}コマ目</strong></td>
-                        {% for day_name in ['月', '火', '水', '木', '金'] %}
+                        <td><strong>Panel{{ current_slot_num }}</strong></td>
+                        {% for day_name in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] %}
                         <td>
                             {# 予約状況の判定 #}
                             {% if (day_name, current_slot_num|int) in reservations %}
-                                <span class="status-reserved">閉</span><br>
+                                <span class="status-reserved">CLOSED</span><br>
                                 <form action="/reserve" method="POST" style="margin-top: 5px;">
                                     <input type="hidden" name="day" value="{{ day_name }}">
                                     <input type="hidden" name="slot" value="{{ current_slot_num }}">
                                     <button type="submit" class="btn-gray" style="padding: 2px 5px; font-size: 10px;">取消</button>
                                 </form>
                             {% else %}
-                                <span class="status-available">開</span><br>
+                                <span class="status-available">OPEN</span><br>
                                 <form action="/reserve" method="POST" style="margin-top: 5px;">
                                     <input type="hidden" name="day" value="{{ day_name }}">
                                     <input type="hidden" name="slot" value="{{ current_slot_num }}">
-                                    <button type="submit" class="btn-gray" style="padding: 5px 10px; font-size: 12px;">予約</button>
+                                    <button type="submit" class="btn-gray" style="padding: 5px 10px; font-size: 12px;">Reservation</button>
                                 </form>
                             {% endif %}
                         </td>
