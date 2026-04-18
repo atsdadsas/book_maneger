@@ -1,5 +1,5 @@
 .container { 
-    max-width: 1000px; 
+    max-width: 500px; 
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -26,4 +26,19 @@
         margin: 5px; /* ボタン同士がくっつかないように隙間を作る */
     }
 
-        .btn-green { background-color: #4CAF50; color: white; }
+.btn-green { background-color: #4CAF50; color: white; }
+
+.body {
+    /* ベースの背景色 */
+    background-color: rgb(0, 0, 0); 
+    
+    /* 縦線と横線をグラデーションで作る */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), /* 横線 */
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px); /* 縦線 */
+    
+    /* グリッドのサイズ（マスの大きさ） */
+    background-size: 20px 20px; 
+    
+    margin: 0;
+}
