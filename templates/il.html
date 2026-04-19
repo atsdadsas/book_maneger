@@ -4,12 +4,47 @@
     <meta charset="UTF-8">
     <title>practice</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='il.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kurenaido&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="btn btn-gray">ホームに戻る</a>
-        <h1>illustration</h1>
-        <p><イラスト></p>
+    <div class="container"style="height:100px; background:transparent;">
+                <a href="/" class="btn btn-green">MENU…</a>
+        <div class="container"style="width:fit-content;height:auto;margin-left:0px;background:transparent;">
+            <a>ロゴ(image)</a>
+        </div>
+    </div>
+    <div class="container header"style="overflow:hidden;">
+        <img src="{{ url_for('static', filename='images/run2/5-1.png') }}"class="header-img"alt="部室の画像" style="border-radius: 8px;">
+    </div>
+    <div style="text-align: center;"><h1>illustration</h1></div>
+    <div class="ticker">
+        <div class="track scroll-left">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+        </div>
+    </div>
+
+    <div class="ticker"style="margin-top: 20px;">
+        <div class="track scroll-right">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+            <img src="{{ url_for('static', filename='images/run2/5-1.png') }}" width="300px" alt="部室の画像" style="border-radius: 8px;">
+        </div>
     </div>
 </body> 
 </html>

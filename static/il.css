@@ -1,44 +1,91 @@
 .container { 
-    max-width: 500px; 
-    width: 90%;
+    /* max-width: 500px;  */
+    width: 92%;
+    height: 300px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 5px;
-    /* margin-bottom: 20px; */
-    
-    background: rgb(192, 192, 192); 
+    background: rgb(178, 163, 163); 
     padding: 10px; 
-    border-radius: 0px; 
+    border-radius: 0px;  
+    box-sizing: border-box;
+    border: 2px solid black;
+}
+.header{ 
+    padding:0px;
+}
+.header-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 画像がコンテナに収まるように調整 */
+    display: block; /* ←下の謎の隙間消える */
+}
+
 
 /* ボタンの共通設計図（paddingなどはここに1回書くだけ！） */
     .btn {
-        font-family: "MS UI Gothic", sans-serif;
-        /* ↓縦並びにさせる効果 */
-        display: inline-block;
+        font-family: "Playwrite Norge", sans-serif;
+        display: block;
+        width: fit-content;
+        margin-left: auto;
         padding: 10px 20px;
         border-radius: 5px;
         text-decoration: none;
         font-weight: bold;
-        border: 1px solid black;
-        border-top: 1px solid white;
-        border-left: 1px solid white;
         cursor: pointer;
-        margin: 5px; /* ボタン同士がくっつかないように隙間を作る */
+
     }
 
 .btn-green { background-color: #4CAF50; color: white; }
 
-.body {
+
+
+body {
     /* ベースの背景色 */
-    background-color: rgb(0, 0, 0); 
-    
+    background-color: rgb(215, 214, 202); 
+    font-family: "Playwrite Norge", cursive;
     /* 縦線と横線をグラデーションで作る */
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), /* 横線 */
-        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px); /* 縦線 */
+        linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px), /* 横線 */
+        linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px); /* 縦線 */
     
     /* グリッドのサイズ（マスの大きさ） */
-    background-size: 20px 20px; 
+    background-size: 30px 30px; 
     
     margin: 0;
+}   
+/* --------画像流すアニメーション */
+.ticker {
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  /* 改行禁止 */
+  flex-wrap: nowrap;
+  width: max-content;
+  /* scrollは名前、@でscrllの動きを定義する */
+}
+.scroll-left {
+  animation: scroll 20s linear infinite;
+}
+.scroll-right {
+  animation: scroll-right 20s linear infinite;
+}
+/* ＠特別な命令 */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
