@@ -1,14 +1,14 @@
 .container { 
     /* max-width: 500px;  */
     width: 92%;
-    height: 300px;
+    height: 500px;
     margin-left: auto;
     margin-right: auto;
     background: rgb(178, 163, 163); 
     padding: 10px; 
     border-radius: 0px;  
     box-sizing: border-box;
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 .header{ 
     padding:0px;
@@ -19,7 +19,20 @@
     object-fit: cover; /* 画像がコンテナに収まるように調整 */
     display: block; /* ←下の謎の隙間消える */
 }
-
+.grid {
+    /* ベースの背景色 */
+    background-color: rgb(196, 196, 196); 
+    font-family: "Playwrite Norge", cursive;
+    /* 縦線と横線をグラデーションで作る */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255) 1px, transparent 1px), /* 横線 */
+        linear-gradient(90deg, rgba(242, 242, 242) 1px, transparent 1px); /* 縦線 */
+    
+    /* グリッドのサイズ（マスの大きさ） */
+    background-size: 30px 30px; 
+    
+    margin: 0;
+}   
 
 /* ボタンの共通設計図（paddingなどはここに1回書くだけ！） */
     .btn {

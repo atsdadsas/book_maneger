@@ -113,6 +113,18 @@ def status():
                         slot=current_slot,
                         reservations=res_dict)
 
+# app.py に一時的に追記
+@app.route('/clear_db')
+def clear_db():
+    try:
+        # データベースのモデル名が「Message」の場合
+        db.session.query(post_message).delete() 
+        db.session.commit()
+        return "掲示板のログをすべて削除しました。"
+    except Exception as e:
+        db.session.rollback()
+        return f"エラーが発生しました: {e}"
+
 @app.route('/history')
 def history():
     # --- 1. 時間と曜日の計算（ここを追加！） ---
