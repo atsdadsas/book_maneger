@@ -118,7 +118,7 @@ def status():
 def clear_db():
     try:
         # データベースのモデル名が「Message」の場合
-        db.session.query(post_message).delete() 
+        db.session.query(Post).delete() 
         db.session.commit()
         return "掲示板のログをすべて削除しました。"
     except Exception as e:
